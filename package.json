@@ -1,0 +1,32 @@
+{
+  "name": "b2c-backend",
+  "version": "0.0.1",
+  "description": "NodeJS based ecommerce platform",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kiranadh1452/b2c-backend.git"
+  },
+  "author": "Kiran Adhikari",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kiranadh1452/b2c-backend/issues"
+  },
+  "homepage": "https://github.com/kiranadh1452/b2c-backend#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-validator": "^6.14.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.5.2",
+    "multer": "^1.4.5-lts.1",
+    "swagger-autogen": "^2.21.5",
+    "swagger-ui-express": "^4.5.0"
+  }
+}
