@@ -5,8 +5,8 @@ const bodyParser = require("body-parser");
 
 // required dependencies from other files
 const connectToDb = require("./config/db");
-const userRoute = require("./routes/userRoute");
-const adminRoute = require("./routes/adminRoute");
+const customerRoute = require("./routes/customerRoute");
+const sellerRoute = require("./routes/sellerRoute");
 const productRoute = require("./routes/productRoute");
 
 // specifying where to read the environment variables from
@@ -25,10 +25,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // user related routes
-app.use("/api/user", userRoute);
+app.use("/api/customer", customerRoute);
 
 // admin related routes
-app.use("/api/admin", adminRoute);
+app.use("/api/seller", sellerRoute);
 
 // product related routes
 app.use("/api/product", productRoute);
