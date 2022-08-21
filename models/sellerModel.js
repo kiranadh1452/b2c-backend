@@ -7,10 +7,6 @@ const userSchema = require("./baseUserModel");
 
 // extend the userSchema to form a seller schema
 const sellerSchema = userSchema.extend({
-    verifiedStatus: {
-        type: Boolean,
-        default: false, // verify only when KYC registered
-    },
     companyName: {
         type: String,
         required: true,

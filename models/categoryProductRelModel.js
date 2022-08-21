@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 
+/**
+ * Schema for the Category-Product Relational model.
+ */
 const CategoryProductRelSchema = new mongoose.Schema({
     categoryId: {
         type: mongoose.Schema.Types.ObjectId,

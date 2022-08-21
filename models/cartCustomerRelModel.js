@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 
+/**
+ * Schema for the Cart-Customer Relational Model.
+ */
 const cartCustomerRelSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
