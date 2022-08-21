@@ -1,8 +1,16 @@
+// package dependencies
+const mongoose = require("mongoose");
 const extend = require("mongoose-schema-extend");
+
+// import the base user schema
 const userSchema = require("./baseUserModel");
 
 // extend the userSchema to form a seller schema
 const sellerSchema = userSchema.extend({
+    verifiedStatus: {
+        type: Boolean,
+        default: false, // verify only when KYC registered
+    },
     companyName: {
         type: String,
         required: true,
@@ -37,5 +45,5 @@ const sellerSchema = userSchema.extend({
     },
 });
 
-const seller = mongoose.model("seller", sellerSchema);
-module.exports = seller;
+const Seller = mongoose.model("Seller", sellerSchema);
+module.exports = Seller;
