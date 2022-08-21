@@ -1,4 +1,7 @@
-// controller for signup process
+/**
+ * Controller function to handle signup process
+ * @returns {object} - response object
+ */
 const signupController = async (req, res, next) => {
     try {
         return res.json({

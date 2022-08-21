@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const Seller = require("../models/sellerModel");
 const Customer = require("../models/customerModel");
+
 /**
  * Controller function to handle admin login
  * @returns {object} - response object
