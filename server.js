@@ -1,13 +1,14 @@
-// required pacakges
+// required packages
 const dotenv = require("dotenv");
 const express = require("express");
 const bodyParser = require("body-parser");
 
 // required dependencies from other files
 const connectToDb = require("./config/db");
-const customerRoute = require("./routes/customerRoute");
+const adminRoute = require("./routes/adminRoute");
 const sellerRoute = require("./routes/sellerRoute");
 const productRoute = require("./routes/productRoute");
+const customerRoute = require("./routes/customerRoute");
 
 // specifying where to read the environment variables from
 dotenv.config({
@@ -24,11 +25,14 @@ app.set("port", port);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// user related routes
+// customer related routes
 app.use("/api/customer", customerRoute);
 
-// admin related routes
+// seller related routes
 app.use("/api/seller", sellerRoute);
+
+// admin related routes
+app.use("/api/admin", adminRoute);
 
 // product related routes
 app.use("/api/product", productRoute);

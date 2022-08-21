@@ -6,7 +6,46 @@ const extend = require("mongoose-schema-extend");
 const userSchema = require("./baseUserModel");
 
 // extend the userSchema to form a seller schema
-const sellerSchema = userSchema.extend({
+const sellerSchema = new mongoose.Schema({
+    firstName: {
+        type: String,
+        required: true,
+    },
+    lastName: {
+        type: String,
+        required: true,
+    },
+    middleName: {
+        type: String,
+    },
+    dob: {
+        type: Date,
+        required: true,
+    },
+    address: {
+        type: String,
+        required: true,
+    },
+    phone: {
+        type: String,
+        required: true,
+    },
+    email: {
+        type: String,
+        required: true,
+    },
+    userType: {
+        type: String,
+        enum: ["customer", "seller"],
+    },
+    hashedPassword: {
+        type: String,
+        required: true,
+    },
+    salt: {
+        type: String,
+        required: true,
+    },
     companyName: {
         type: String,
         required: true,
