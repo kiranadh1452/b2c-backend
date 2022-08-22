@@ -1,7 +1,7 @@
 const Seller = require("../models/sellerModel");
 const Customer = require("../models/customerModel");
 const generateOtp = require("../utils/otpGenerator");
-const { setCacheOTP } = require("../cache/otp");
+const { setCache, getCache } = require("../cache/cacheHandler");
 /**
  * Controller function to handle signup process
  * @returns {object} - response object
@@ -21,31 +21,13 @@ const signupController = async (req, res, next) => {
             shippingAddress: req.body.shippingAddress,
         };
 
-        /**
-         * Scenarios where the user is not allowed to signup
-         * The email or phone number are critical while signing up
-         * So, check for these fields in both Seller and Customer models
-         */
-        const possibleCombinationOfUserExistence = [
-            ["email", userData.email, Seller],
-            ["phone", userData.phone, Seller],
-            ["email", userData.email, Customer],
-            ["phone", userData.phone, Customer],
-        ];
-        possibleCombinationOfUserExistence.forEach(async (combination) => {
-            const [fieldName, fieldValue, modelName] = combination;
-            const userExists = await checkIfUserExists(
-                fieldName,
-                fieldValue,
-                modelName
-            );
-            if (userExists) {
-                return res.status(409).json({
-                    success: false,
-                    message: "User already exists",
-                });
-            }
-        });
+        const userExists = await ensureNoUserExist(userData);
+        if (userExists) {
+            return res.status(409).json({
+                success: false,
+                message: "User already exists",
+            });
+        }
 
         // generate OTP and check it exists
         const otp = generateOtp();
@@ -60,7 +42,7 @@ const signupController = async (req, res, next) => {
         // some code here to send otp to user via sms or email
 
         // cache the user info including OTP
-        const cacheData = setCacheOTP("new", userData.email, userData);
+        const cacheData = setCache("new", userData.email, userData);
         if (!cacheData) {
             return res.status(500).json({
                 success: false,
@@ -84,13 +66,105 @@ const signupController = async (req, res, next) => {
 };
 
 /**
+ * Controller to handle post signup otp verification
+ */
+const postSignupVerificationController = async (req, res, next) => {
+    try {
+        const { email, otp } = req.body;
+
+        // check if some data is cached for the requested email
+        const cachedData = getCache("new", email);
+        if (!cachedData) {
+            return res.status(404).json({
+                success: false,
+                message: "OTP not found",
+            });
+        }
+
+        const userExists = await ensureNoUserExist(cachedData);
+        if (userExists) {
+            return res.status(409).json({
+                success: false,
+                message: "Your account has already been created",
+            });
+        }
+
+        // verify the otp
+        if (cachedData.otp !== otp) {
+            return res.status(409).json({
+                success: false,
+                message: "OTP does not match",
+            });
+        }
+
+        // otp is not stored in database, that's why delete it
+        delete cachedData.otp;
+
+        const User = cachedData.userType === "seller" ? Seller : Customer;
+        const newUser = await new User({
+            ...cachedData,
+        }).save();
+
+        return res.status(200).json({
+            success: true,
+            message: "User created successfully",
+            user: newUser,
+        });
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+/**
+ * Function to ensure that no other user exist for the same email or phone
+ * @param {Object} userData - user data to be checked
+ * @returns
+ */
+const ensureNoUserExist = async (userData) => {
+    /**
+     * Scenarios where the user is not allowed to signup
+     * The email or phone number are critical while signing up
+     * So, check for these fields in both Seller and Customer models
+     */
+    const possibleCombinationOfUserExistence = [
+        ["email", userData.email, Seller],
+        ["phone", userData.phone, Seller],
+        ["email", userData.email, Customer],
+        ["phone", userData.phone, Customer],
+    ];
+    // possibleCombinationOfUserExistence.forEach(async (combination) => {
+    for (let combination of possibleCombinationOfUserExistence) {
+        const [fieldName, fieldValue, modelName] = combination;
+        const userExists = await checkIfUserExists(
+            fieldName,
+            fieldValue,
+            modelName
+        );
+        if (userExists) {
+            return true;
+        }
+    }
+    return false;
+};
+
+/**
  * Function to check if user exists
+ * @param {String} fieldName - field name to be checked
+ * @param {String} fieldValue - field value to be checked
+ * @param {String} modelName - model name to be checked
  */
 const checkIfUserExists = async (fieldName, fieldValue, modelName) => {
-    const user = await modelName.findOne({ fieldName: fieldValue });
+    let data = {};
+    data[fieldName] = fieldValue;
+    console.log(data);
+    const user = await modelName.findOne({ ...data });
     if (user) {
+        console.log("User found: ", user);
         return true;
     }
     return false;
 };
-module.exports = signupController;
+module.exports = { signupController, postSignupVerificationController };

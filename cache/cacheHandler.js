@@ -8,7 +8,7 @@ const myCache = new NodeCache();
  * @param {String} data - data to be cached
  * @return {Boolean} - true if OTP is cached successfully else false
  */
-const setCacheOTP = (category, identifier, data) => {
+const setCache = (category, identifier, data) => {
     try {
         const key = `${category}+${identifier}`;
         const success = myCache.set(key, data, 1000000);
@@ -24,7 +24,7 @@ const setCacheOTP = (category, identifier, data) => {
  * @param {String} identifier - unique identifier of the user
  * @return {String} - cached data if found else null
  */
-const getCacheOTP = (category, identifier) => {
+const getCache = (category, identifier) => {
     try {
         const key = `${category}+${identifier}`;
         value = myCache.get(key);
@@ -35,6 +35,6 @@ const getCacheOTP = (category, identifier) => {
 };
 
 module.exports = {
-    setCacheOTP,
-    getCacheOTP,
+    setCache,
+    getCache,
 };
