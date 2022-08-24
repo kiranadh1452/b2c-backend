@@ -8,12 +8,12 @@ const Customer = require("../models/customerModel");
  */
 const loginController = async (req, res, next) => {
     try {
-        const { userName, password, rememberMe, userType } = req.body;
+        const { email, password, rememberMe, userType } = req.body;
 
-        // is username and password present ?
-        if (!userName || !password) {
+        // is email and password present ?
+        if (!email || !password) {
             return res.status(400).json({
-                message: "Please provide username and password",
+                message: "Please provide email and password",
             });
         }
 
@@ -30,8 +30,9 @@ const loginController = async (req, res, next) => {
             });
         }
 
-        const user = await User.findOne({ userName });
+        const user = await User.findOne({ email });
 
+        // user exists ?
         if (!user) {
             return res.status(400).json({
                 success: false,
@@ -43,6 +44,14 @@ const loginController = async (req, res, next) => {
             return res.status(400).json({
                 success: false,
                 message: "No password found",
+            });
+        }
+
+        // user type stored vs user type provided
+        if (user.userType !== userType) {
+            return res.status(400).json({
+                success: false,
+                message: "User type does not match",
             });
         }
 
@@ -70,7 +79,6 @@ const loginController = async (req, res, next) => {
         return res.status(200).json({
             success: true,
             message: "Login successful",
-            data: user,
             token: token,
         });
     } catch (err) {

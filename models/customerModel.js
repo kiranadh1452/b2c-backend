@@ -1,6 +1,6 @@
 // package-based dependencies
+const crypto = require("crypto");
 const mongoose = require("mongoose");
-const extend = require("mongoose-schema-extend");
 
 // file based dependencies
 const userSchema = require("./baseUserModel");
@@ -51,6 +51,49 @@ const customerSchema = new mongoose.Schema({
         required: true,
     },
 });
+
+// methods inside user schema
+customerSchema.methods = {
+    /**
+     * Method to authenticate the user
+     * @param {String} password - password to authenticate
+     * @return {Boolean} - true if password is correct, false otherwise
+     */
+    authentication(password) {
+        // use a global secret salt and a user specific random salt to hash the password
+        const encryptWith = process.env.SECRET_SALT + this.salt;
+        const newEncrypt = this.encryptPasswordFunc(password, encryptWith);
+        if (!newEncrypt || !this.hashedPassword) return false;
+        return newEncrypt === this.hashedPassword;
+    },
+
+    /**
+     * Method to encrypt the password
+     * @param {String} password - password to encrypt
+     * @return {String} - encrypted password
+     */
+    encryptPasswordFunc(password) {
+        if (!password) return "";
+        try {
+            const encryptWith = process.env.SECRET_SALT + this.salt;
+            return crypto
+                .createHmac("sha256", encryptWith)
+                .update(password)
+                .digest("hex");
+        } catch (err) {
+            console.log(err);
+        }
+    },
+
+    /**
+     * Function to create a salt using current date and random number
+     * @return {String} - salt
+     */
+    makeSalt() {
+        const salt = Math.round(new Date().valueOf() * Math.random()) + "";
+        return salt;
+    },
+};
 
 const Customer = mongoose.model("Customer", customerSchema);
 module.exports = Customer;
