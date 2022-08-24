@@ -5,8 +5,6 @@ const Customer = require("../models/customerModel");
 // external dependencies
 const {
     authenticate,
-    encryptPasswordFunc,
-    makeSalt,
 } = require("./authHelper.js");
 
 /**
@@ -17,7 +15,7 @@ const loginController = async (req, res, next) => {
     try {
         const { email, password, rememberMe, userType } = req.body;
 
-        // is email and password present ?
+        // are email and password fields present ?
         if (!email || !password) {
             return res.status(400).json({
                 message: "Please provide email and password",
@@ -33,7 +31,7 @@ const loginController = async (req, res, next) => {
         } else {
             return res.status(400).json({
                 success: false,
-                message: "Please provide user type",
+                message: "Please provide valid user type",
             });
         }
 
@@ -54,7 +52,7 @@ const loginController = async (req, res, next) => {
             });
         }
 
-        // user type stored vs user type provided
+        // user type matches?
         if (user.userType !== userType) {
             return res.status(400).json({
                 success: false,
