@@ -37,7 +37,7 @@ const loginController = async (req, res, next) => {
             });
         }
 
-        const user = await User.findOne({ email },  "+salt +hashedPassword");
+        const user = await User.findOne({ email }, "+salt +hashedPassword");
 
         // user exists ?
         if (!user) {
@@ -77,7 +77,7 @@ const loginController = async (req, res, next) => {
          */
         const token = jwt.sign(
             user.toJSON(),
-            process.env.SECRET_SALT + user.salt,
+            process.env.SECRET_SALT,
             {
                 expiresIn: expiryTime,
             }
