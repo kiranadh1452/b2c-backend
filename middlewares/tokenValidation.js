@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 
 /**
  * Function to validate the auth token
+ * Verify salt token first, then use thus obtained salt + global salt to verify the token
  * @returns {object} - response object
  */
 const checkForTokenValidation = (req, res, next) => {
@@ -15,11 +16,21 @@ const checkForTokenValidation = (req, res, next) => {
         }
 
         const authToken = authHeader.split(" ");
-        const [bearer, token] = authToken;
+        const [bearer, accessToken, saltToken] = authToken;
+        let salt = undefined;
 
-        if (bearer === "Bearer" && token) {
+        // first, verify saltToken and get the user specific salt
+        if (saltToken) {
+            salt = jwt.verify(saltToken, process.env.SECRET_SALT);
+        }
+
+        // use the obtained salt and global secret salt to verify the token
+        if (bearer === "Bearer" && accessToken) {
             try {
-                const verifiedData = jwt.verify(token, process.env.SECRET_SALT);
+                const verifiedData = jwt.verify(
+                    accessToken,
+                    process.env.SECRET_SALT + salt
+                );
                 if (verifiedData) {
                     res.data = verifiedData;
                     next();

@@ -71,13 +71,16 @@ const loginController = async (req, res, next) => {
 
         const expiryTime = rememberMe ? "7d" : "1d";
 
+        // this salt token is also returned to the user
+        const saltToken = jwt.sign(user.salt, process.env.SECRET_SALT);
+
         /**
          * json.sign(payload, secret, options)
          * Here, if payload is not a object literal, then the expiry time won't be set.
          */
         const token = jwt.sign(
             user.toJSON(),
-            process.env.SECRET_SALT,
+            process.env.SECRET_SALT + user.salt,
             {
                 expiresIn: expiryTime,
             }
@@ -86,7 +89,7 @@ const loginController = async (req, res, next) => {
         return res.status(200).json({
             success: true,
             message: "Login successful",
-            token: token,
+            token: token + " " + saltToken,
         });
     } catch (err) {
         console.log(err);
