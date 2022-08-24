@@ -2,6 +2,13 @@ const jwt = require("jsonwebtoken");
 const Seller = require("../models/sellerModel");
 const Customer = require("../models/customerModel");
 
+// external dependencies
+const {
+    authenticate,
+    encryptPasswordFunc,
+    makeSalt,
+} = require("./authHelper.js");
+
 /**
  * Controller function to handle admin login
  * @returns {object} - response object
@@ -30,7 +37,7 @@ const loginController = async (req, res, next) => {
             });
         }
 
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email },  "+salt +hashedPassword");
 
         // user exists ?
         if (!user) {
@@ -55,7 +62,7 @@ const loginController = async (req, res, next) => {
             });
         }
 
-        if (!user.authentication(password)) {
+        if (!authenticate(password, user.salt, user.hashedPassword)) {
             return res.status(400).json({
                 success: false,
                 message: "Incorrect password",

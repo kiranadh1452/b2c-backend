@@ -2,6 +2,7 @@ const Seller = require("../models/sellerModel");
 const Customer = require("../models/customerModel");
 const generateOtp = require("../utils/otpGenerator");
 const { setCache, getCache } = require("../cache/cacheHandler");
+const { encryptPasswordFunc, makeSalt } = require("./authHelper");
 /**
  * Controller function to handle signup process
  * @returns {object} - response object
@@ -38,6 +39,11 @@ const signupController = async (req, res, next) => {
             });
         }
         userData.otp = otp;
+
+        // create a salt, generate hashedValue of password, then delete password
+        userData.salt = makeSalt();
+        userData.hashedPassword = encryptPasswordFunc(userData.password, userData.salt)
+        delete userData.password;
 
         // some code here to send otp to user via sms or email
 
@@ -159,7 +165,6 @@ const ensureNoUserExist = async (userData) => {
 const checkIfUserExists = async (fieldName, fieldValue, modelName) => {
     let data = {};
     data[fieldName] = fieldValue;
-    console.log(data);
     const user = await modelName.findOne({ ...data });
     if (user) {
         console.log("User found: ", user);

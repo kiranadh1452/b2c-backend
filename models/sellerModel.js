@@ -41,42 +41,44 @@ const sellerSchema = new mongoose.Schema({
     hashedPassword: {
         type: String,
         required: true,
+        select: false,
     },
     salt: {
         type: String,
         required: true,
+        select: false,
     },
     companyName: {
         type: String,
-        required: true,
+        required: false,
     },
     companyAddress: {
         type: String,
-        required: true,
+        required: false,
     },
     companyPhone: {
         type: String,
-        required: true,
+        required: false,
     },
     companyEmail: {
         type: String,
-        required: true,
+        required: false,
     },
     companyWebsite: {
         type: String,
-        required: true,
+        required: false,
     },
     companyDescription: {
         type: String,
-        required: true,
+        required: false,
     },
     companyLogo: {
         type: String,
-        required: true,
+        required: false,
     },
     companyBanner: {
         type: String,
-        required: true,
+        required: false,
     },
 });
 
