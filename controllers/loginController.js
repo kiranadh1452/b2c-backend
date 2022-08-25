@@ -1,11 +1,7 @@
 const jwt = require("jsonwebtoken");
-const Seller = require("../models/sellerModel");
-const Customer = require("../models/customerModel");
-
+const User = require("../models/userModel");
 // external dependencies
-const {
-    authenticate,
-} = require("./authHelper.js");
+const { authenticate } = require("./authHelper.js");
 
 /**
  * Controller function to handle admin login
@@ -23,12 +19,7 @@ const loginController = async (req, res, next) => {
         }
 
         // is userType customer or seller ?
-        let User = undefined;
-        if (userType === "seller") {
-            User = Seller;
-        } else if (userType === "customer") {
-            User = Customer;
-        } else {
+        if (!(userType === "seller" || userType === "customer")) {
             return res.status(400).json({
                 success: false,
                 message: "Please provide valid user type",

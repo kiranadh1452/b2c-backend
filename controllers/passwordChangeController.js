@@ -1,5 +1,4 @@
-const Seller = require("../models/sellerModel");
-const Customer = require("../models/customerModel");
+const User = require("../models/userModel");
 const generateOtp = require("../utils/otpGenerator");
 const { setCache, getCache } = require("../cache/cacheHandler");
 const { authenticate, encryptPasswordFunc, makeSalt } = require("./authHelper");
@@ -8,28 +7,16 @@ const forgotPasswordController = async (req, res, next) => {
     try {
         const { email, userType, newPassword } = req.body;
 
-        if (!email || !userType || !newPassword) {
+        if (!email || !newPassword) {
             return res.status(400).json({
                 success: false,
                 message: "Please provide email, user type and new password",
             });
         }
 
-        // is userType customer or seller ?
-        let User = undefined;
-        if (userType === "seller") {
-            User = Seller;
-        } else if (userType === "customer") {
-            User = Customer;
-        } else {
-            return res.status(400).json({
-                success: false,
-                message: "Please provide valid user type",
-            });
-        }
-
+        // check for user and if the user type provided in request is same as stored in database
         const user = await User.findOne({ email });
-        if (!user) {
+        if (!user || user.userType !== userType) {
             return res.status(400).json({
                 success: false,
                 message: "User not found",
@@ -76,12 +63,6 @@ const changePasswordController = async (req, res, next) => {
         const { email, userType } = res.data;
         // this controller requires user authentication, hence it is reached only after the middleware
         // since the middleware sets the authenticated user data in `res.data`, we can look into this value
-        let User = undefined;
-        if (userType === "seller") {
-            User = Seller;
-        } else if (userType === "customer") {
-            User = Customer;
-        }
 
         const user = await User.findOne({ email }, "+salt +hashedPassword");
         if (!user || !user.hashedPassword) {
@@ -130,7 +111,6 @@ const verifyPasswordChangeController = async (req, res, next) => {
             });
         }
 
-        const User = cachedData.userType === "seller" ? Seller : Customer;
         const userExists = await User.countDocuments({ email });
         if (!userExists) {
             return res.status(409).json({
@@ -164,7 +144,7 @@ const verifyPasswordChangeController = async (req, res, next) => {
 
         return res.status(200).json({
             success: true,
-            message: "User created successfully",
+            message: "Password reset successfully",
             user: user,
         });
     } catch (error) {

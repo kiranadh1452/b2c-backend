@@ -36,14 +36,17 @@ const userSchema = mongoose.Schema({
     userType: {
         type: String,
         enum: ["customer", "seller"],
+        required: true,
     },
     hashedPassword: {
         type: String,
+        select: false,
         required: true,
     },
     salt: {
         type: String,
         required: true,
+        select: false,
     },
 });
 
@@ -90,4 +93,5 @@ userSchema.methods = {
     },
 };
 
-module.exports = userSchema;
+const User = mongoose.model("User", userSchema);
+module.exports = User;

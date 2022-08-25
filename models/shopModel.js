@@ -1,43 +1,46 @@
+// package dependencies
 const mongoose = require("mongoose");
 
-/**
- * Schema for the KYC (Know Your Customer) model.
- */
-const kycSchema = new mongoose.Schema({
-    userId: {
+// shop schema
+const shopSchema = new mongoose.Schema({
+    sellerId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,
     },
-    kycDate: {
-        type: Date,
-        required: true,
-    },
-    kycDocumentType: {
+    shopName: {
         type: String,
         required: true,
     },
-    kycDocumentImage: {
-        type: [String],
-        required: true,
-    },
-    kycDocumentNumber: {
+    shopAddress: {
         type: String,
         required: true,
     },
-    kycDocumentExpiry: {
+    shopPhone: {
         type: String,
         required: true,
     },
-    kycDocumentIssuedBy: {
+    shopEmail: {
         type: String,
         required: true,
     },
-    kyDocumentIssuedDate: {
-        type: Date,
+    shopWebsite: {
+        type: String,
+        required: true,
+    },
+    shopDescription: {
+        type: String,
+        required: true,
+    },
+    shopLogo: {
+        type: String,
+        required: true,
+    },
+    shopBanner: {
+        type: String,
         required: true,
     },
 });
 
-const Kyc = mongoose.model("Kyc", kycSchema);
-module.exports = Kyc;
+const Shop = mongoose.model("Shop", shopSchema);
+module.exports = Shop;

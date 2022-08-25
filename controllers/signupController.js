@@ -1,5 +1,4 @@
-const Seller = require("../models/sellerModel");
-const Customer = require("../models/customerModel");
+const User = require("../models/userModel");
 const generateOtp = require("../utils/otpGenerator");
 const { setCache, getCache } = require("../cache/cacheHandler");
 const { encryptPasswordFunc, makeSalt } = require("./authHelper");
@@ -106,7 +105,6 @@ const postSignupVerificationController = async (req, res, next) => {
         // otp is not stored in database, that's why delete it
         delete cachedData.otp;
 
-        const User = cachedData.userType === "seller" ? Seller : Customer;
         const newUser = await new User({
             ...cachedData,
         }).save();
@@ -136,10 +134,8 @@ const ensureNoUserExist = async (userData) => {
      * So, check for these fields in both Seller and Customer models
      */
     const possibleCombinationOfUserExistence = [
-        ["email", userData.email, Seller],
-        ["phone", userData.phone, Seller],
-        ["email", userData.email, Customer],
-        ["phone", userData.phone, Customer],
+        ["email", userData.email, User],
+        ["phone", userData.phone, User],
     ];
     // possibleCombinationOfUserExistence.forEach(async (combination) => {
     for (let combination of possibleCombinationOfUserExistence) {
@@ -167,7 +163,6 @@ const checkIfUserExists = async (fieldName, fieldValue, modelName) => {
     data[fieldName] = fieldValue;
     const user = await modelName.findOne({ ...data });
     if (user) {
-        console.log("User found: ", user);
         return true;
     }
     return false;

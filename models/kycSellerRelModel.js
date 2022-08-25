@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const kycSellerRelSchema = new mongoose.Schema({
     sellerId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Seller",
+        ref: "User",
         required: true,
     },
     kycId: {
