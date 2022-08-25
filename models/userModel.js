@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { USER_TYPES } = require("../constants.js");
 
 /**
  * Create a schema for the user model
@@ -16,6 +17,7 @@ const userSchema = mongoose.Schema({
     },
     middleName: {
         type: String,
+        required: false,
     },
     dob: {
         type: Date,
@@ -35,7 +37,7 @@ const userSchema = mongoose.Schema({
     },
     userType: {
         type: String,
-        enum: ["customer", "seller"],
+        enum: USER_TYPES,
         required: true,
     },
     hashedPassword: {

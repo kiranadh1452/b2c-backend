@@ -1,8 +1,23 @@
 const express = require("express");
 // dependencies from other files
-const loginController = require("../controllers/loginController");
+
+// constants
+const {
+    REQUIRED_FIELDS_SIGNUP,
+    REQUIRED_FIELDS_LOGIN,
+} = require("../constants");
+// middlewares
 const { isCustomer } = require("../middlewares/userTypeValidation");
 const checkForTokenValidation = require("../middlewares/tokenValidation");
+const {
+    dataFormatValidation,
+    nonEmptyDataValidation,
+    validationResultHandler,
+    nonEmptyPlusDataFormatValidation,
+} = require("../middlewares/dataFormatValidation");
+
+// controllers
+const loginController = require("../controllers/loginController");
 const {
     signupController,
     postSignupVerificationController,
@@ -16,10 +31,26 @@ const {
 const router = express.Router();
 
 // these end points require no headers
-router.post("/login", loginController);
-router.post("/signup", signupController);
+router.post(
+    "/login",
+    nonEmptyPlusDataFormatValidation(REQUIRED_FIELDS_LOGIN),
+    validationResultHandler,
+    loginController
+);
+router.post(
+    "/signup",
+    nonEmptyDataValidation(REQUIRED_FIELDS_SIGNUP),
+    dataFormatValidation([...REQUIRED_FIELDS_SIGNUP, "middleName"]),
+    validationResultHandler,
+    signupController
+);
+router.post(
+    "/signup/verify",
+    nonEmptyPlusDataFormatValidation(["otp", "email"]),
+    validationResultHandler,
+    postSignupVerificationController
+);
 router.post("/forgot-password", forgotPasswordController);
-router.post("/signup/verify", postSignupVerificationController);
 router.post("/forgot-password/verify", verifyPasswordChangeController);
 
 // the end points below require a valid token, hence router would use middleware

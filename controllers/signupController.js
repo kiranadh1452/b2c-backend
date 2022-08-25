@@ -18,7 +18,6 @@ const signupController = async (req, res, next) => {
             email: req.body.email,
             userType: req.body.userType,
             password: req.body.password,
-            shippingAddress: req.body.shippingAddress,
         };
 
         const userExists = await ensureNoUserExist(userData);

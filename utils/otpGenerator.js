@@ -1,9 +1,10 @@
+const { OTP_LENGTH } = require("../constants");
 /**
  * Function to generate a random OTP
  * @oaram {Number} length - length of the OTP
  * @return {String} - OTP
  */
-const generateOtp = (length = 6) => {
+const generateOtp = (length = OTP_LENGTH) => {
     const chars =
         "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     let otp = "";
