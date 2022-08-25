@@ -2,7 +2,7 @@ const Seller = require("../models/sellerModel");
 const Customer = require("../models/customerModel");
 const generateOtp = require("../utils/otpGenerator");
 const { setCache, getCache } = require("../cache/cacheHandler");
-const { encryptPasswordFunc, makeSalt } = require("./authHelper");
+const { authenticate, encryptPasswordFunc, makeSalt } = require("./authHelper");
 
 const forgotPasswordController = async (req, res, next) => {
     try {
@@ -70,6 +70,53 @@ const forgotPasswordController = async (req, res, next) => {
     }
 };
 
+const changePasswordController = async (req, res, next) => {
+    try {
+        const { password, newPassword } = req.body;
+        const { email, userType } = res.data;
+        // this controller requires user authentication, hence it is reached only after the middleware
+        // since the middleware sets the authenticated user data in `res.data`, we can look into this value
+        let User = undefined;
+        if (userType === "seller") {
+            User = Seller;
+        } else if (userType === "customer") {
+            User = Customer;
+        }
+
+        const user = await User.findOne({ email }, "+salt +hashedPassword");
+        if (!user || !user.hashedPassword) {
+            return res.status(400).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+        if (!authenticate(password, user.salt, user.hashedPassword)) {
+            return res.status(400).json({
+                success: false,
+                message: "Incorrect password",
+            });
+        }
+
+        // generate new salt and get new password hash
+        user.salt = makeSalt();
+        user.hashedPassword = encryptPasswordFunc(newPassword, user.salt);
+        await user.updateOne({
+            salt: user.salt,
+            hashedPassword: user.hashedPassword,
+        });
+
+        res.status(200).json({
+            success: true,
+            message: "Password changed successfully",
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
 const verifyPasswordChangeController = async (req, res, next) => {
     try {
         const { email, otp } = req.body;
@@ -103,7 +150,6 @@ const verifyPasswordChangeController = async (req, res, next) => {
         // otp is not stored in database, that's why delete it
         delete cachedData.otp;
 
-
         const user = await User.findOneAndUpdate(
             { email },
             { $set: cachedData }
@@ -129,4 +175,8 @@ const verifyPasswordChangeController = async (req, res, next) => {
     }
 };
 
-module.exports = { forgotPasswordController, verifyPasswordChangeController };
+module.exports = {
+    forgotPasswordController,
+    changePasswordController,
+    verifyPasswordChangeController,
+};

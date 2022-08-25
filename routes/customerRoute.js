@@ -7,6 +7,7 @@ const {
     postSignupVerificationController,
 } = require("../controllers/signupController");
 const {
+    changePasswordController,
     forgotPasswordController,
     verifyPasswordChangeController,
 } = require("../controllers/passwordChangeController");
@@ -27,5 +28,6 @@ router.post("/forgot-password/verify", verifyPasswordChangeController);
 // the end points below require a valid token, hence router would use middleware
 // to ensure valid token in passed in the request header
 router.use(checkForTokenValidation);
+router.post("/change-password", changePasswordController);
 
 module.exports = router;
