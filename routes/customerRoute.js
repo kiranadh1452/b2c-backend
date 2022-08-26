@@ -4,12 +4,6 @@ const express = require("express");
 // middlewares
 const { isCustomer } = require("../middlewares/userTypeValidation");
 const checkForTokenValidation = require("../middlewares/tokenValidation");
-const {
-    dataFormatValidation,
-    nonEmptyDataValidation,
-    validationResultHandler,
-    nonEmptyPlusDataFormatValidation,
-} = require("../middlewares/dataFormatValidation");
 
 const router = express.Router();
 router.use(checkForTokenValidation, isCustomer);

@@ -7,6 +7,7 @@ const {
     PHONE_LENGTH,
     ADDRESS_LENGTH,
     PASSWORD_LENGTH,
+    SHOP_NAME_LENGTH,
 } = require("../constants");
 
 /**
@@ -38,14 +39,14 @@ const dataFormatValidation = (dataArray) => {
         const validations = [];
         dataArray.forEach((data) => {
             switch (data) {
-                case "email":
+                case "email" || "shopEmail":
                     validations.push(
                         check(data)
                             .isEmail()
                             .withMessage("The provided email is invalid")
                     );
                     break;
-                case "password":
+                case "password" || "newPassword":
                     validations.push(
                         check(data)
                             .isLength({
@@ -70,7 +71,7 @@ const dataFormatValidation = (dataArray) => {
                             )
                     );
                     break;
-                case "phone":
+                case "phone" || "shopPhone":
                     validations.push(
                         check(data)
                             .isLength({
@@ -82,7 +83,7 @@ const dataFormatValidation = (dataArray) => {
                             )
                     );
                     break;
-                case "address":
+                case "address" || "shopAddress":
                     validations.push(
                         check(data)
                             .isLength({
@@ -106,6 +107,18 @@ const dataFormatValidation = (dataArray) => {
                         check(data)
                             .isLength({ min: OTP_LENGTH, max: OTP_LENGTH })
                             .withMessage("Wrong OTP format")
+                    );
+                    break;
+                case "shopName":
+                    validations.push(
+                        check(data)
+                            .isLength({
+                                min: SHOP_NAME_LENGTH.min,
+                                max: SHOP_NAME_LENGTH.max,
+                            })
+                            .withMessage(
+                                `Shop name must be between ${SHOP_NAME_LENGTH.min} to ${SHOP_NAME_LENGTH.max} characters`
+                            )
                     );
                     break;
             }
