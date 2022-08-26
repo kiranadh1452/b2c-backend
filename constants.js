@@ -21,6 +21,7 @@ const USER_TYPES = ["customer", "seller"];
 const REQUIRED_FIELDS_SIGNUP = [
     "firstName",
     "lastName",
+    "password",
     "address",
     "phone",
     "email",
