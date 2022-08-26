@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 // required dependencies from other files
 const connectToDb = require("./config/db");
 const { SERVER_PORT } = require("./constants");
+const userRoute = require("./routes/userRoute");
 const adminRoute = require("./routes/adminRoute");
 const sellerRoute = require("./routes/sellerRoute");
 const productRoute = require("./routes/productRoute");
@@ -25,6 +26,9 @@ const app = express();
 app.set("port", port);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// user related routes
+app.use("/api/user", userRoute);
 
 // customer related routes
 app.use("/api/customer", customerRoute);

@@ -29,6 +29,7 @@ const REQUIRED_FIELDS_SIGNUP = [
     "userType",
 ];
 const REQUIRED_FIELDS_LOGIN = ["email", "password"];
+const REQUIRED_FIELDS_CHANGE_PASSWORD = ["password", "newPassword"];
 
 module.exports = {
     CACHE_TTL,
@@ -41,4 +42,5 @@ module.exports = {
     PASSWORD_LENGTH,
     REQUIRED_FIELDS_LOGIN,
     REQUIRED_FIELDS_SIGNUP,
+    REQUIRED_FIELDS_CHANGE_PASSWORD,
 };

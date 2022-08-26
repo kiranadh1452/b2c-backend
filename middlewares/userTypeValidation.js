@@ -40,6 +40,22 @@ const isCustomer = async (req, res, next) => {
     }
 };
 
+const isUser = async (req, res, next) => {
+    try {
+        if (res.data.userType === "customer" || res.data.userType === "seller") {
+            next();
+        } else {
+            return res.status(401).json({
+                message: "You are not authorized to access this resource",
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            message: `Something went wrong: ${error}`,
+        });
+    }
+}
+
 /**
  * To be a verified seller, the seller must have a verified KYC document.
  * Using the seller id, find the seller's KYC document and check if it is verified.
@@ -64,6 +80,7 @@ const isVerifiedSeller = async (req, res, next) => {
 };
 
 module.exports = {
+    isUser,
     isSeller,
     isCustomer,
     isVerifiedSeller,
