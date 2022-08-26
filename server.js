@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 
 // required dependencies from other files
 const connectToDb = require("./config/db");
+const { SERVER_PORT } = require("./constants");
 const adminRoute = require("./routes/adminRoute");
 const sellerRoute = require("./routes/sellerRoute");
 const productRoute = require("./routes/productRoute");
@@ -15,7 +16,7 @@ dotenv.config({
     path: "./config/.env",
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || SERVER_PORT;
 const mongoUri = process.env.MONGODB_URI;
 
 connectToDb(mongoUri);

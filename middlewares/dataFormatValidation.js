@@ -1,6 +1,13 @@
 // Using express-validator to validate the data sent in the request body.
 const { check, validationResult } = require("express-validator");
-const { USER_TYPES, OTP_LENGTH } = require("../constants");
+const {
+    USER_TYPES,
+    OTP_LENGTH,
+    NAME_LENGTH,
+    PHONE_LENGTH,
+    ADDRESS_LENGTH,
+    PASSWORD_LENGTH,
+} = require("../constants");
 
 /**
  * Function to validate that the data is non-empty
@@ -41,9 +48,12 @@ const dataFormatValidation = (dataArray) => {
                 case "password":
                     validations.push(
                         check(data)
-                            .isLength({ min: 6, max: 20 })
+                            .isLength({
+                                min: PASSWORD_LENGTH.min,
+                                max: PASSWORD_LENGTH.max,
+                            })
                             .withMessage(
-                                "Password must be between 6 and 20 characters"
+                                `Password must be between ${PASSWORD_LENGTH.min} to ${PASSWORD_LENGTH.max} characters`
                             )
                     );
                     break;
@@ -51,27 +61,36 @@ const dataFormatValidation = (dataArray) => {
                     validations.push(
                         check(data)
                             .optional()
-                            .isLength({ min: 3, max: 30 })
+                            .isLength({
+                                min: NAME_LENGTH.min,
+                                max: NAME_LENGTH.max,
+                            })
                             .withMessage(
-                                "Name must be between 3 and 30 characters"
+                                `Name must be between ${NAME_LENGTH.min} to ${NAME_LENGTH.max} characters`
                             )
                     );
                     break;
                 case "phone":
                     validations.push(
                         check(data)
-                            .isLength({ min: 10, max: 15 })
+                            .isLength({
+                                min: PHONE_LENGTH.min,
+                                max: PHONE_LENGTH.max,
+                            })
                             .withMessage(
-                                "Length of contact number must be between 10 to 15"
+                                `Length of contact number must be between ${PHONE_LENGTH.min} to ${PHONE_LENGTH.max} characters`
                             )
                     );
                     break;
                 case "address":
                     validations.push(
                         check(data)
-                            .isLength({ min: 10 })
+                            .isLength({
+                                min: ADDRESS_LENGTH.min,
+                                max: ADDRESS_LENGTH.max,
+                            })
                             .withMessage(
-                                "Address field must be between 10 to 200 characters"
+                                `Address must be between ${ADDRESS_LENGTH.min} to ${ADDRESS_LENGTH.max} characters`
                             )
                     );
                     break;

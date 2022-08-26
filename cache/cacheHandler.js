@@ -1,4 +1,6 @@
 const NodeCache = require("node-cache");
+const { CACHE_TTL } = require("../constants");
+
 const myCache = new NodeCache();
 
 /**
@@ -11,7 +13,7 @@ const myCache = new NodeCache();
 const setCache = (category, identifier, data) => {
     try {
         const key = `${category}+${identifier}`;
-        const success = myCache.set(key, data, 1000000);
+        const success = myCache.set(key, data, CACHE_TTL);
         return success;
     } catch (error) {
         console.log(error);

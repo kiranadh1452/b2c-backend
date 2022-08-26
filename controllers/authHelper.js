@@ -42,7 +42,7 @@ const makeSalt = () => {
 };
 
 module.exports = {
+    makeSalt,
     authenticate,
     encryptPasswordFunc,
-    makeSalt,
 };
