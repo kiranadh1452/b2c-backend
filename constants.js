@@ -19,7 +19,7 @@ const ADDRESS_LENGTH = {
     min: 10,
     max: 200,
 };
-const USER_TYPES = ["customer", "seller"];
+const USER_TYPES = ["customer", "seller", "admin"];
 
 // related to login and signup purposes
 const REQUIRED_FIELDS_SIGNUP = [
