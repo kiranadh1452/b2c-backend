@@ -38,4 +38,15 @@
     -   Verify seller.
     -   Bann seller
 
+## How to run the server ?
+- Clone this repository
+- Run the following command to install dependencies.
+    ```bash
+    npm install
+    ```
+- Go inside the 'config' directory and add a file `.env` with entries for required environment variables.
+- Start the server using the following command.
+    ```bash
+    npm start
+    ```
 > Under development
