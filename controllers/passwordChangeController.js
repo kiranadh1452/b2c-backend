@@ -60,9 +60,9 @@ const forgotPasswordController = async (req, res, next) => {
 const changePasswordController = async (req, res, next) => {
     try {
         const { password, newPassword } = req.body;
-        const { email, userType } = res.data;
+        const { email, userType } = res.locals.authData;
         // this controller requires user authentication, hence it is reached only after the middleware
-        // since the middleware sets the authenticated user data in `res.data`, we can look into this value
+        // since the middleware sets the authenticated user data in `res.locals.authData`, we can look into this value
 
         const user = await User.findOne({ email }, "+salt +hashedPassword");
         if (!user || !user.hashedPassword) {

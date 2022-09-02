@@ -43,7 +43,7 @@ const checkForTokenValidation = async (req, res, next) => {
                     });
                 }
                 if (verifiedData) {
-                    res.data = verifiedData;
+                    res.locals.authData = verifiedData;
                     next();
                 }
             } catch (err) {
