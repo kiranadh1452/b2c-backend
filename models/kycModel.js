@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
  * Schema for the KYC (Know Your Customer) model.
  */
 const kycSchema = new mongoose.Schema({
-    sellerId: {
+    seller: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,

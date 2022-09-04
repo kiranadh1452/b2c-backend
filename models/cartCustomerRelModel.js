@@ -4,12 +4,12 @@ const mongoose = require("mongoose");
  * Schema for the Cart-Customer Relational Model.
  */
 const cartCustomerRelSchema = new mongoose.Schema({
-    userId: {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,
     },
-    cartId: [
+    cart: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Cart",

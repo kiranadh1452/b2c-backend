@@ -4,12 +4,12 @@ const mongoose = require("mongoose");
  * Schema for the Category-Product Relational model.
  */
 const CategoryProductRelSchema = new mongoose.Schema({
-    categoryId: {
+    category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Category",
         index: true,
     },
-    productId: {
+    product: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
         index: true,

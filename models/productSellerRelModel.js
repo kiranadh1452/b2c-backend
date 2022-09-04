@@ -4,12 +4,12 @@ const mongoose = require("mongoose");
  * Schema for a product seller relationship
  */
 const ProductSellerRelSchema = new mongoose.Schema({
-    sellerId: {
+    seller: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         index: true,
     },
-    productId: {
+    product: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
         index: true,
