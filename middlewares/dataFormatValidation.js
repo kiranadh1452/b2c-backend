@@ -121,6 +121,13 @@ const dataFormatValidation = (dataArray) => {
                             )
                     );
                     break;
+                case "shopId" || "userId" || "productId":
+                    validations.push(
+                        check(data).isMongoId().withMessage("Invalid ID")
+                    );
+                    break;
+                default:
+                    break;
             }
         });
         return validations;

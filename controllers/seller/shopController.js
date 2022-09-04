@@ -1,4 +1,5 @@
 const Shop = require("../../models/shopModel");
+const checkPermission = require("../../accessControl/ability");
 
 // controller to handle shop adding operation
 const addShopController = async (req, res) => {
@@ -82,4 +83,37 @@ const editShopController = async (req, res) => {
     }
 };
 
-module.exports = { addShopController, editShopController };
+// delete a shop
+const deleteShopController = async (req, res) => {
+    try {
+        const shopId = req.params?.shopId;
+        const shop = await Shop.findOne({ _id: shopId });
+        if (!shop) {
+            return res.status(404).json({
+                success: false,
+                message: "Shop not found",
+            });
+        }
+        if (!checkPermission(res.locals?.authData, req.type, shop)) {
+            return res.status(401).json({
+                success: false,
+                message: "You are not authorized to delete this shop",
+            });
+        }
+        await shop.delete();
+        return res.status(200).json({
+            success: true,
+            message: "Shop Deleted",
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+        });
+    }
+};
+module.exports = {
+    addShopController,
+    editShopController,
+    deleteShopController,
+};

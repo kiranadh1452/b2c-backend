@@ -16,6 +16,7 @@ const {
 const {
     addShopController,
     editShopController,
+    deleteShopController,
 } = require("../controllers/seller/shopController");
 
 const router = express.Router();
@@ -33,6 +34,11 @@ router.patch(
     dataFormatValidation(REQUIRED_FIELDS_ADD_SHOP),
     validationResultHandler,
     editShopController
+);
+router.patch(
+    "/delete-shop/:shopId",
+    nonEmptyPlusDataFormatValidation(["shopId"]),
+    deleteShopController
 );
 
 module.exports = router;
