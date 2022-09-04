@@ -6,51 +6,56 @@ const { USER_TYPES } = require("../constants.js");
  * This is an abstract model that will be extended by the other models.
  * These other models would be the customer and seller models.
  */
-const userSchema = mongoose.Schema({
-    firstName: {
-        type: String,
-        required: true,
+const userSchema = mongoose.Schema(
+    {
+        firstName: {
+            type: String,
+            required: true,
+        },
+        lastName: {
+            type: String,
+            required: true,
+        },
+        middleName: {
+            type: String,
+            required: false,
+        },
+        dob: {
+            type: Date,
+            required: true,
+        },
+        address: {
+            type: String,
+            required: true,
+        },
+        phone: {
+            type: String,
+            required: true,
+        },
+        email: {
+            type: String,
+            required: true,
+        },
+        userType: {
+            type: String,
+            enum: USER_TYPES,
+            required: true,
+        },
+        hashedPassword: {
+            type: String,
+            select: false,
+            required: true,
+        },
+        salt: {
+            type: String,
+            required: true,
+            select: false,
+        },
     },
-    lastName: {
-        type: String,
-        required: true,
-    },
-    middleName: {
-        type: String,
-        required: false,
-    },
-    dob: {
-        type: Date,
-        required: true,
-    },
-    address: {
-        type: String,
-        required: true,
-    },
-    phone: {
-        type: String,
-        required: true,
-    },
-    email: {
-        type: String,
-        required: true,
-    },
-    userType: {
-        type: String,
-        enum: USER_TYPES,
-        required: true,
-    },
-    hashedPassword: {
-        type: String,
-        select: false,
-        required: true,
-    },
-    salt: {
-        type: String,
-        required: true,
-        select: false,
-    },
-});
+    {
+        timestamps: true,
+    }
+);
 
 // methods inside user schema
 userSchema.methods = {

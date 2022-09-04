@@ -3,26 +3,31 @@ const mongoose = require("mongoose");
 /**
  * Schema for a cart
  */
-const cartSchema = new mongoose.Schema({
-    products: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Product",
+const cartSchema = new mongoose.Schema(
+    {
+        products: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Product",
+            },
+        ],
+        dateCreated: {
+            type: Date,
+            default: Date.now,
         },
-    ],
-    dateCreated: {
-        type: Date,
-        default: Date.now,
+        dateUpdated: {
+            type: Date,
+            default: Date.now,
+        },
+        totalPrice: {
+            type: Number,
+            required: true,
+        },
     },
-    dateUpdated: {
-        type: Date,
-        default: Date.now,
-    },
-    totalPrice: {
-        type: Number,
-        required: true,
-    },
-});
+    {
+        timestamps: true,
+    }
+);
 
 const Cart = mongoose.model("Cart", cartSchema);
 module.exports = Cart;

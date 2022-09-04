@@ -9,13 +9,11 @@ const cartCustomerRelSchema = new mongoose.Schema({
         ref: "User",
         required: true,
     },
-    cart: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Cart",
-            required: true,
-        },
-    ],
+    cart: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Cart",
+        required: true,
+    },
 });
 
 const Cart_Customer_Rel = mongoose.model(
