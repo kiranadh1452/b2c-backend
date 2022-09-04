@@ -7,6 +7,7 @@ const { REQUIRED_FIELDS_ADD_SHOP } = require("../constants");
 const { isSeller } = require("../middlewares/userTypeValidation");
 const checkForTokenValidation = require("../middlewares/tokenValidation");
 const {
+    dataFormatValidation,
     validationResultHandler,
     nonEmptyPlusDataFormatValidation,
 } = require("../middlewares/dataFormatValidation");
@@ -27,6 +28,11 @@ router.post(
     validationResultHandler,
     addShopController
 );
-router.patch("/edit-shop", editShopController);
+router.patch(
+    "/edit-shop",
+    dataFormatValidation(REQUIRED_FIELDS_ADD_SHOP),
+    validationResultHandler,
+    editShopController
+);
 
 module.exports = router;

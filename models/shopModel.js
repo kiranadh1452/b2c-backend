@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 // shop schema
 const shopSchema = new mongoose.Schema({
-    sellerId: {
+    seller: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,
@@ -26,7 +26,7 @@ const shopSchema = new mongoose.Schema({
     },
     shopWebsite: {
         type: String,
-        required: true,
+        required: false,
     },
     shopDescription: {
         type: String,
@@ -34,11 +34,11 @@ const shopSchema = new mongoose.Schema({
     },
     shopLogo: {
         type: String,
-        required: true,
+        required: false,
     },
     shopBanner: {
         type: String,
-        required: true,
+        required: false,
     },
 });
 
