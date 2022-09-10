@@ -49,6 +49,5 @@
     ```bash
     npm start
     ```
-> Currently working on access control (attribute based)
 
 > Under Development
